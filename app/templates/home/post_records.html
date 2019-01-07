@@ -1,0 +1,71 @@
+{% extends "home/home.html" %}
+{% from "bootstrap/pagination.html" import render_pagination %}
+{% block content %}
+    {% include "home/menu.html" %}
+
+    <div class="col-md-9">
+        <div class="panel panel-warning">
+            <div class="panel-heading">
+                <h3 class="panel-title"><span class="glyphicon glyphicon-map-marker"></span>&nbsp;我的发帖记录</h3>
+            </div>
+            {% for msg in get_flashed_messages() %}
+                <div class="alert alert-success alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <i class="icon fa fa-ban"></i>
+                    {{ msg }}
+                </div>
+            {% endfor %}
+            <div class="panel-body">
+                <ul class="commentList">
+                    {% for post in posts %}
+                        <li class="item cl">
+                            <a href="user.html">
+                                <i class="avatar size-L radius">
+                                    {% if user.face %}
+                                        <img src="{{ url_for('static', filename='uploads/users/'+user.face) }}"
+                                             width="50px" height="50px" style="border:1px solid #abcdef;"
+                                             class="img-circle">
+                                    {% else %}
+                                        <img alt="50x50" src="holder.js/50x50" class="img-circle"
+                                             style="border:1px solid #abcdef;">
+                                    {% endif %}
+                                </i>
+                            </a>
+                            <div class="comment-main">
+                                <header class="comment-header">
+                                    <a href="{{ url_for('home.play') }}?post_id={{ post.id }}">
+                                        <h5>{{ post.title }}</h5></a>
+                                    <div class="comment-meta">
+                                        <a class="comment-author" href="user.html">{{ user_name }}</a>
+                                        发表于
+                                        {{ post.addtime }}
+                                    </div>
+                                </header>
+                                <div class="comment-body">
+
+                                    <p>{{ post.content |safe|truncate(length=200,killwords=False) }}</p>
+                                    <a href="{{ url_for('home.post_del') }}?id={{ post.id }}"
+                                       class="label label-danger pull-right">删除</a>
+                                </div>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+                <div class="col-md-12 text-center">
+                    {% if pagination %}
+                        {{ render_pagination(pagination) }}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script>
+        $(document).ready(function () {
+            $("#m_6").addClass("active");
+        });
+    </script>
+{% endblock %}

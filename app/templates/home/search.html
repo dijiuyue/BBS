@@ -1,0 +1,74 @@
+{% extends "home/home.html" %}
+{% from "bootstrap/pagination.html" import render_pagination %}
+{% block usercenter %}
+    <li>
+        <a class="curlink" href="{{ url_for('home.user') }}"><span
+                class="glyphicon glyphicon-user"></span>&nbsp;{{ current_user_name }}</a>
+    </li>
+{% endblock %}
+{% block content %}
+    <!--内容-->
+
+    <div class="row">
+        <div class="col-md-12">
+            <ol class="breadcrumb" style="margin-top:6px;">
+                <li>搜索到与"{{ search }}"有关的主题帖，共{{ count }}条</li>
+            </ol>
+        </div>
+        <div class="col-md-12">
+
+            {% for foo in results %}
+
+                <div class="panel panel-default">
+
+
+                    <div class="panel-heading">
+                        <a href="{{ url_for('home.play') }}?post_id={{ foo.id }}"><h1
+                                class="panel-title">{{ foo.title }}</h1></a>
+                    </div>
+                    <div class="panel-body">
+                        {{ foo.content | safe | truncate(length=200,killwords=False) }}
+                    </div>
+                    <div class="panel-footer">作者：{{ foo.user.name }}--发布于：{{ foo.addtime }}
+                        {% if current_user_id != foo.user_id %}
+                            <a href="{{ url_for('home.index_col') }}?id={{ foo.id }}"
+                               class="label label-warning pull-right ">收藏</a>
+                        {% endif %}
+
+
+                        {% if current_user_id == foo.user_id %}
+
+                            <a href="{{ url_for('home.index_del') }}?id={{ foo.id }}"
+                               class="label label-danger pull-right">删除</a>
+                        {% endif %}
+                    </div>
+
+                </div>
+            {% endfor %}
+            {#  {% for result in results %}
+{#                <div class="panel">
+{#                    <div class="panel-title">
+{#                        <a href="{{ url_for('home.play') }}?post_id={{ result.id }}">
+{#                            {{ result.title }}
+{#                        </a>
+{#                    </div>
+{#                    <div class="panel-body">
+{#                        {{ result.content| safe | truncate(length=200,killwords=False) }}
+{#                    </div>
+{#                </div>
+{#
+{#            {% endfor %} #}
+
+
+            <div class="col-md-12 text-center">
+                {% if pagination %}
+                    {{ render_pagination(pagination) }}
+                {% endif %}
+
+
+            </div>
+
+        </div>
+
+        <!--内容-->
+{% endblock %}

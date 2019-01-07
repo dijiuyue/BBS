@@ -1,0 +1,174 @@
+{% extends "home/home.html" %}
+{# 使用bootstrap分页 #}
+{% from "bootstrap/pagination.html" import render_pagination %}
+{% block usercenter %}
+     <li>
+                        <a class="curlink" href="{{ url_for('home.user') }}"><span
+                                class="glyphicon glyphicon-user"></span>&nbsp;{{ current_user_name }}</a>
+                    </li>
+{% endblock %}
+{% block content %}
+    <div class="container" style="margin-top:8px">
+        <div class="row">
+            <div class="col-md-12" style="margin-top:6px;">
+
+
+                <div class="panel-body">
+                    <h2>{{ post.title }}</h2>
+                    <ul class="commentList">
+                        <li class="item cl">
+                            <a href="user.html">
+                                <i class="avatar size-L radius">
+                                    {% if post.user.face %}
+                                        <img src="{{ url_for('static', filename='uploads/users/'+post.user.face) }}"
+                                             width="50px" height="50px" style="border:1px solid #abcdef;"
+                                             class="img-circle">
+                                    {% else %}
+                                        <img alt="50x50" src="holder.js/50x50" class="img-circle"
+                                             style="border:1px solid #abcdef;">
+                                    {% endif %}
+                                </i>
+                            </a>
+                            <div class="comment-main">
+                                <header class="comment-header">
+                                    <div class="comment-meta">
+                                        <a class="comment-author" href="user.html">
+                                            {% if author.id ==current_user_id %}
+                                                我
+                                            {% else %}
+                                                {{ author.name }}
+                                            {% endif %}</a>
+                                        发布于
+                                        {{ post.addtime }}
+                                        {% if current_user_id != post.user_id %}
+                                            <a href="{{ url_for('home.index_col') }}?id={{ post.id }}"
+                                               class="label label-warning pull-right ">收藏</a>
+                                        {% endif %}
+                                        {% if current_user_id == post.user_id %}
+
+                                            <a href="{{ url_for('home.index_del') }}?id={{ post.id }}"
+                                               class="label label-danger pull-right">删除</a>
+                                        {% endif %}
+                                    </div>
+                                </header>
+                                <div class="comment-body">
+                                    <p>{{ post.content }}</p>
+                                </div>
+                            </div>
+                        </li>
+
+
+                    </ul>
+
+                </div>
+                </br>
+                </br>
+
+
+                <div class="panel panel-danger">
+
+                    <div class="panel-body">
+                        {% if "user" not in session %}
+
+                            <div class="alert alert-danger alert-dismissible" role="alert">
+                                <button type="button" class="close" data-dismiss="alert">
+                                    <span aria-hidden="true">×</span>
+                                    <span class="sr-only">Close</span>
+                                </button>
+                                <strong>请先<a href="{{ url_for('home.user_login') }}" target="_blank" class="text-info">登录</a>，才可参与评论！</strong>
+                            </div>
+                        {% endif %}
+                        <ol class="breadcrumb" style="margin-top:6px;">
+                            <li>全部评论({{ count }})</li>
+                        </ol>
+                        {% if "user" in session %}
+                            {# 评论文本框 #}
+                            <form role="form" style="margin-bottom:6px;" method="post">
+                                <div class="form-group">
+                                    <div>
+                                        {{ form.content.label }}
+                                        {# <label for="input_content"></label> #}
+                                        {{ form.content }} {{ form.submit }}
+                                        {% for err in form.content.errors %}
+                                            <div class="col-md-12" style="color: red">{{ err }}</div>
+                                            <br/>
+                                        {% endfor %}
+
+                                    </div>
+                                    {{ form.csrf_token }}
+
+                                    <div class="col-xs-12" id="error_content"></div>
+                                </div>
+
+
+                                </br>
+                                {% for msg in  get_flashed_messages() %}
+                                    <div class="alert alert-success alert-dismissible">
+                                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×
+                                        </button>
+                                        <i class="icon fa fa-check"></i> {{ msg }}
+                                    </div>
+                                {% endfor %}
+                                {# <a class="btn btn-danger" id="btn-col"><span class="glyphicon glyphicon-heart"></span>&nbsp;收藏电影</a> #}
+                            </form>
+                        {% endif %}
+
+                        <ul class="commentList">
+
+                            {% for comment in comments %}
+                                <li class="item cl">
+                                    <a href="user.html">
+                                        <i class="avatar size-L radius">
+                                            {% if comment.user.face %}
+                                                <img src="{{ url_for('static', filename='uploads/users/'+comment.user.face) }}"
+                                                     width="50px" height="50px" style="border:1px solid #abcdef;"
+                                                     class="img-circle">
+                                            {% else %}
+                                                <img alt="50x50" src="holder.js/50x50" class="img-circle"
+                                                     style="border:1px solid #abcdef;">
+                                            {% endif %}
+                                        </i>
+                                    </a>
+                                    <div class="comment-main">
+                                        <header class="comment-header">
+                                            <div class="comment-meta">
+                                                <div><a class="comment-author" href="user.html">{{ comment.user.name }}</a>
+                                                {% if current_user_id != comment.user_id %}
+                                            <a href="{{ url_for('home.play_col') }}?id={{ comment.id }}"
+                                               class="label label-warning pull-right ">收藏</a>
+                                        {% endif %}
+                                        {% if current_user_id == comment.user_id %}
+
+                                            <a href="{{ url_for('home.comment_del') }}?id={{ comment.id }}"
+                                               class="label label-danger pull-right">删除</a>
+                                        {% endif %}
+                                                </div>
+                                                <div class="lt">{{ comment.addtime }}</div>
+
+                                            </div>
+                                        </header>
+                                        <div class="comment-body">
+                                            <p>{{ comment.content }}</p>
+                                        </div>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                            {# 分页 #}
+                            <div>
+                            </div>
+
+
+                        </ul>
+                        <div class="col-md-12 text-center">
+                            {% if pagination %}
+                                {{ render_pagination(pagination) }}
+                            {% endif %}
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

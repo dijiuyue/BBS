@@ -1,0 +1,26 @@
+{% block content %}
+
+    <div class="col-md-3">
+        <div class="list-group">
+            <a id="m_1" href="{{ url_for('home.user') }}" class="list-group-item ">
+                <span class="glyphicon glyphicon-user"></span>&nbsp;会员中心
+            </a>
+            <a id="m_2" href="{{ url_for('home.pwd') }}" class="list-group-item">
+                <span class="glyphicon glyphicon-lock"></span>&nbsp;修改密码
+            </a>
+            <a id="m_6" href="{{ url_for('home.postrecords') }}" class="list-group-item">
+                <span class="glyphicon glyphicon-comment"></span>&nbsp;发帖记录
+            </a>
+            <a id="m_3" href="{{ url_for('home.comments') }}" class="list-group-item">
+                <span class="glyphicon glyphicon-comment"></span>&nbsp;评论记录
+            </a>
+            <a id="m_4" href="{{ url_for('home.loginlog') }}" class="list-group-item">
+                <span class="glyphicon glyphicon-calendar"></span>&nbsp;登录日志
+            </a>
+            <a id="m_5" href="{{ url_for('home.col') }}" class="list-group-item">
+                <span class="glyphicon glyphicon-heart"></span>&nbsp;收藏列表
+            </a>
+        </div>
+    </div>
+
+{% endblock %}

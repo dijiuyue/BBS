@@ -1,0 +1,20 @@
+.comment-submit {
+    width: 90px;
+    height: 60px;
+    <!--  position: absolute;-->
+    right: -80px;
+    top: 0;
+    padding: 4px 15px;
+    font-size: 14px;
+    color: #fff;
+    border-radius: 4px;
+    text-align: center;
+    min-width: 60px;
+    vertical-align: top;
+    cursor: pointer;
+    background-color: #00ca6d;
+    border: 1px solid #00ca6d;
+    transition: .1s;
+    user-select: none;
+    outline: none;
+}

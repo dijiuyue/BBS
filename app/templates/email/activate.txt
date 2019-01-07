@@ -1,0 +1,2 @@
+<h1>你好 {{username}}:</h1>
+<a href="{{ url_for('home.activate',token=token,_external=True) }}">激活请点击该链接用来激活您的账户</a>
